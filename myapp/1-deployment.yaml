@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "true"
+        instrumentation.opentelemetry.io/inject-python: "true"    
+    spec:
+      containers:
+        - name: myapp
+          image: aiaverage/minimal-app:latest
+          ports:
+            - name: http
+              containerPort: 1212
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m

@@ -1,0 +1,59 @@
+# coreDns:
+#   enabled: true
+
+# kubeDns:
+#   enabled: false
+
+alertmanager:
+  persistentVolume:
+    enabled: true
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+          storageClassName: ebs-sc
+
+prometheusOperator:
+  createCustomResource: false
+  global:
+   rbac:
+    create: true
+  
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+          storageClassName: ebs-sc
+grafana:
+  grafana.ini:
+    server: 
+      domain: 1224b4df3d4.internet.am
+      root_url: http://1224b4df3d4.internet.am/grafana
+      serve_from_sub_path: true
+
+  persistence:
+    enabled: true
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+    storageClassName: ebs-sc
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
